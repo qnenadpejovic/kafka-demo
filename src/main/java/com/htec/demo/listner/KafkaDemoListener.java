@@ -1,39 +1,64 @@
 package com.htec.demo.listner;
 
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.messaging.handler.annotation.Payload;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
-public class KafkaDemoListener implements KafkaMessageListener{
-
-    private String topicName;
-    private String listenerGroupId;
-    private String concurrency;
+public class KafkaDemoListener {
     private List<String> messages;
 
-    public KafkaDemoListener(String topicName, String listenerGroupId, String concurrency) {
-        this.topicName = topicName;
-        this.listenerGroupId = listenerGroupId;
-        this.concurrency = concurrency;
+    public KafkaDemoListener() {
         messages = new LinkedList<>();
     }
 
-    public void onMessage(String message) {
-        System.out.println("message received: " + message);
+    @KafkaListener(
+            topics = {"demo-topic"},
+            groupId = "demo-test-groupId",
+            concurrency = "1",
+            containerFactory = "customKafkaListenerContainerFactory"
+    )
+    public void onMessage(@Payload String message, Acknowledgment acknowledgment) throws InterruptedException {
+        //onMessageManualImmediateAck(message, acknowledgment);
+        //onMessageWithSleepOnEachMessage(message);
+        onMessageWithSleep(message, acknowledgment);
+    }
+
+    private void onMessageManualImmediateAck(String message, Acknowledgment acknowledgment) throws InterruptedException {
+        System.out.println(message);
+        acknowledgment.acknowledge();
+        messages.add(message);
+    }
+    private void onMessageWithSleep(String message) throws InterruptedException {
+        System.out.println(message);
+        if(message.equals("msg2")) {
+            Thread.sleep(5000);
+        }
         messages.add(message);
     }
 
-    public String getTopicName() {
-        return topicName;
+    private void onMessageWithSleepOnEachMessage(String message) throws InterruptedException {
+        System.out.println(message);
+        if(message.equals("msg2")) {
+            Thread.sleep(5000);
+        } else {
+            Thread.sleep(1000);
+        }
+        messages.add(message);
     }
 
-    public String getListenerGroupId() {
-        return listenerGroupId;
+    private void onMessageWithSleep(String message, Acknowledgment acknowledgment) throws InterruptedException {
+        System.out.println(message);
+        if(message.equals("msg2")) {
+            Thread.sleep(5000);
+        } else {
+            acknowledgment.acknowledge();
+        }
+        messages.add(message);
     }
 
-    public String getConcurrency() {
-        return concurrency;
-    }
 
     public List<String> getMessages() {
         return messages;
