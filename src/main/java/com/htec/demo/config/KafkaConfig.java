@@ -57,15 +57,7 @@ public class KafkaConfig {
 
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory((ConsumerFactory<? super String, ? super String>) noAutoCommitConsumerFactory());
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.TIME);
-        //factory.getContainerProperties().setAckTime(2000);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.COUNT);
-        //factory.getContainerProperties().setAckCount(2);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.setConsumerFactory((ConsumerFactory<? super String, ? super String>) autoCommitConsumerFactory());
         factory.setCommonErrorHandler(new DefaultErrorHandler((consumerRecord, e) -> {
             // send to DLQ for example
         }, new FixedBackOff(1000, 4)));
@@ -73,8 +65,8 @@ public class KafkaConfig {
         return factory;
     }
 
-    @Bean("noAutoCommitConsumerFactory")
-    public ConsumerFactory<?, ?> noAutoCommitConsumerFactory() {
+    @Bean("autoCommitConsumerFactory")
+    public ConsumerFactory<?, ?> autoCommitConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, getBootstrapServers());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -82,7 +74,8 @@ public class KafkaConfig {
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 2);
         props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 3000);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetSetting);
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 5000);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
