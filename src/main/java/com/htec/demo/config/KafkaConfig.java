@@ -38,7 +38,7 @@ public class KafkaConfig {
         producerProperties.put("buffer.memory", 33554432);
         producerProperties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         producerProperties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        //producerProperties.put("enable.idempotency", true);
+        producerProperties.put("enable.idempotency", true);
 
         return new DefaultKafkaProducerFactory<>(producerProperties);
     }
@@ -65,7 +65,7 @@ public class KafkaConfig {
         //factory.getContainerProperties().setAckTime(2000);
         //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.COUNT);
         //factory.getContainerProperties().setAckCount(2);
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         factory.setCommonErrorHandler(new DefaultErrorHandler((consumerRecord, e) -> {
             // send to DLQ for example
         }, new FixedBackOff(1000, 4)));

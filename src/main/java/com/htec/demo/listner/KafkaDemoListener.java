@@ -22,7 +22,8 @@ public class KafkaDemoListener {
     )
     public void onMessage(@Payload String message, Acknowledgment acknowledgment) throws InterruptedException {
         //onMessageManualImmediateAck(message, acknowledgment);
-        //onMessageWithSleepOnEachMessage(message);
+        //onMessageWithSleep(message);
+        onMessageWithSleepOnEachMessage(message);
         onMessageWithSleep(message, acknowledgment);
     }
 
@@ -31,6 +32,7 @@ public class KafkaDemoListener {
         acknowledgment.acknowledge();
         messages.add(message);
     }
+
     private void onMessageWithSleep(String message) throws InterruptedException {
         System.out.println(message);
         if(message.equals("msg2")) {
@@ -58,7 +60,6 @@ public class KafkaDemoListener {
         }
         messages.add(message);
     }
-
 
     public List<String> getMessages() {
         return messages;

@@ -39,6 +39,10 @@ public class EmbeddedKafkaTest {
 
     }
 
+    // TODO: MANUAL_IMMEDIATE acknowledge without calling acknowledge
+    // TODO: AUTO_COMMIT test commit interval
+    // TODO: producer breaks
+    // TODO: make separate branches
     @Test
     public void givenEmbeddedKafkaBroker_whenSendingWithProducer_thenMessageReceivedManualImmediateNoAck() throws InterruptedException {
 
@@ -125,6 +129,7 @@ public class EmbeddedKafkaTest {
     public void givenEmbeddedKafkaBroker_whenSendingWithProducer_thenMessageReceivedTime() throws InterruptedException {
 
         kafkaDemoProducer.sendMessage("msg1");
+        kafkaDemoProducer.sendMessage("msg3");
         kafkaDemoProducer.sendMessage("msg2");
 
         Thread.sleep(30000);
@@ -133,9 +138,12 @@ public class EmbeddedKafkaTest {
         Assertions.assertNotEquals(2, messages.size());
         long countMsg1 = messages.stream().filter(msg -> msg.equals("msg1")).count();
         long countMsg2 = messages.stream().filter(msg -> msg.equals("msg2")).count();
+        long countMsg3 = messages.stream().filter(msg -> msg.equals("msg3")).count();
+
 
         Assertions.assertNotEquals(1, countMsg2);
         Assertions.assertEquals(1, countMsg1);
+        Assertions.assertEquals(1, countMsg3);
 
     }
 
