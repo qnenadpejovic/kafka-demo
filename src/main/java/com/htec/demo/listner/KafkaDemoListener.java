@@ -21,10 +21,6 @@ public class KafkaDemoListener {
             containerFactory = "customKafkaListenerContainerFactory"
     )
     public void onMessage(@Payload String message) throws InterruptedException {
-        onMessageAutoCommit(message);
-    }
-
-    private void onMessageAutoCommit(String message) throws InterruptedException {
         System.out.println(message);
         if(message.equals("msg2")) {
             Thread.sleep(2000);
