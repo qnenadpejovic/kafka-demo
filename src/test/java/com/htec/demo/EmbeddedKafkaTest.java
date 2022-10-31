@@ -38,27 +38,4 @@ public class EmbeddedKafkaTest {
         Assertions.assertEquals("msg2", messages.get(1));
 
     }
-
-    @Test
-    public void givenEmbeddedKafkaBroker_whenSendingWithProducer_thenMessageReceivedManualImmediateNoAck() throws InterruptedException {
-
-        kafkaDemoProducer.sendMessage("msg3");
-        kafkaDemoProducer.sendMessage("msg4");
-        kafkaDemoProducer.sendMessage("msg1");
-        kafkaDemoProducer.sendMessage("msg2");
-
-        Thread.sleep(30000);
-        List<String> messages = kafkaDemoListener.getMessages();
-
-        Assertions.assertNotEquals(4, messages.size());
-        long countMsg1 = messages.stream().filter(msg -> msg.equals("msg1")).count();
-        long countMsg2 = messages.stream().filter(msg -> msg.equals("msg2")).count();
-        long countMsg3 = messages.stream().filter(msg -> msg.equals("msg3")).count();
-        long countMsg4 = messages.stream().filter(msg -> msg.equals("msg4")).count();
-
-        Assertions.assertNotEquals(1, countMsg1);
-        Assertions.assertNotEquals(1, countMsg2);
-        Assertions.assertNotEquals(1, countMsg3);
-        Assertions.assertNotEquals(1, countMsg4);
-    }
 }
