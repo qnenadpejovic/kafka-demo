@@ -21,11 +21,6 @@ public class KafkaDemoListener {
             containerFactory = "customKafkaListenerContainerFactory"
     )
     public void onMessage(@Payload String message, Acknowledgment acknowledgment) throws InterruptedException {
-        onMessageManualImmediateAck(message, acknowledgment);
-
-    }
-
-    private void onMessageManualImmediateAck(String message, Acknowledgment acknowledgment) throws InterruptedException {
         System.out.println(message);
         if(message.equals("msg1")) {
             acknowledgment.acknowledge();
