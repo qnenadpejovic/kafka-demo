@@ -20,43 +20,10 @@ public class KafkaDemoListener {
             concurrency = "1",
             containerFactory = "customKafkaListenerContainerFactory"
     )
-    public void onMessage(@Payload String message, Acknowledgment acknowledgment) throws InterruptedException {
-        //onMessageManualImmediateAck(message, acknowledgment);
-        //onMessageWithSleep(message);
-        onMessageWithSleepOnEachMessage(message);
-        onMessageWithSleep(message, acknowledgment);
-    }
-
-    private void onMessageManualImmediateAck(String message, Acknowledgment acknowledgment) throws InterruptedException {
-        System.out.println(message);
-        acknowledgment.acknowledge();
-        messages.add(message);
-    }
-
-    private void onMessageWithSleep(String message) throws InterruptedException {
+    public void onMessage(@Payload String message) throws InterruptedException {
         System.out.println(message);
         if(message.equals("msg2")) {
             Thread.sleep(5000);
-        }
-        messages.add(message);
-    }
-
-    private void onMessageWithSleepOnEachMessage(String message) throws InterruptedException {
-        System.out.println(message);
-        if(message.equals("msg2")) {
-            Thread.sleep(5000);
-        } else {
-            Thread.sleep(1000);
-        }
-        messages.add(message);
-    }
-
-    private void onMessageWithSleep(String message, Acknowledgment acknowledgment) throws InterruptedException {
-        System.out.println(message);
-        if(message.equals("msg2")) {
-            Thread.sleep(5000);
-        } else {
-            acknowledgment.acknowledge();
         }
         messages.add(message);
     }
