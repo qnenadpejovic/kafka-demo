@@ -58,14 +58,7 @@ public class KafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory((ConsumerFactory<? super String, ? super String>) noAutoCommitConsumerFactory());
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.TIME);
-        //factory.getContainerProperties().setAckTime(2000);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.COUNT);
-        //factory.getContainerProperties().setAckCount(2);
-        //factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         factory.setCommonErrorHandler(new DefaultErrorHandler((consumerRecord, e) -> {
             // send to DLQ for example
         }, new FixedBackOff(1000, 4)));
