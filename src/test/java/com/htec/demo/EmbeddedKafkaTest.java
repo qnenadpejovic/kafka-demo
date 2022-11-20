@@ -18,8 +18,6 @@ import java.util.List;
 public class EmbeddedKafkaTest {
 
     @Autowired
-    KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
-    @Autowired
     KafkaDemoProducer kafkaDemoProducer;
     @Autowired
     KafkaDemoListener kafkaDemoListener;

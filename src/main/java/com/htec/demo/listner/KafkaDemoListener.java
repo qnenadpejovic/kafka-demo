@@ -24,9 +24,8 @@ public class KafkaDemoListener {
         System.out.println(message);
         if(message.equals("msg2")) {
             Thread.sleep(5000);
-        } else {
-            acknowledgment.acknowledge();
         }
+        acknowledgment.acknowledge();
         messages.add(message);
     }
 
